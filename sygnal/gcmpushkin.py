@@ -599,7 +599,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
 
             if n.room_name and n.sender_display_name:
                 content_display = None
-                if n.content["msgtype"] == "m.text":
+                if "msgtype" in n.content and n.content["msgtype"] == "m.text":
                     content_display = n.content["body"]
 
                 body['message']['notification'] = {
