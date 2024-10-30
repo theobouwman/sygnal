@@ -1,4 +1,4 @@
-# Dockerfile to build the matrixdotorg/sygnal docker images.
+# Dockerfile to build the theobouwman/sygnal docker images.
 #
 # To build the image, run `docker build` command from the root of the
 # sygnal repository:
