@@ -37,7 +37,7 @@ jobs:
         id: set-tag
         uses: docker/metadata-action@v3
         with:
-          images: theobouwman/sygnal
+          images: theobouwman010/sygnal
           tags: |
             type=ref,event=tag
 
