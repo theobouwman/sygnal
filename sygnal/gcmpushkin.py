@@ -81,7 +81,7 @@ logger = logging.getLogger(__name__)
 
 GCM_URL = b"https://fcm.googleapis.com/fcm/send"
 GCM_URL_V1 = "https://fcm.googleapis.com/v1/projects/{ProjectID}/messages:send"
-MAX_TRIES = 3
+MAX_TRIES = 1 # NOTE/TODO: changed to 1 to not send duplicated
 RETRY_DELAY_BASE = 10
 RETRY_DELAY_BASE_QUOTA_EXCEEDED = 60
 MAX_BYTES_PER_FIELD = 1024
@@ -597,6 +597,16 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                 body = {}
                 body["message"] = new_body
 
+            if n.room_name and n.sender_display_name:
+                content_display = None
+                if n.content["msgtype"] == "m.text":
+                    content_display = n.content["body"]
+
+                body['message']['notification'] = {
+                    'title': n.room_name,
+                    'body': f'({n.sender_display_name}) {content_display}'
+                }
+            
             for retry_number in range(0, MAX_TRIES):
                 # This has to happen inside the retry loop since `pushkeys` can be modified in the
                 # event of a failure that warrants a retry.
