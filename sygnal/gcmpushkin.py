@@ -597,6 +597,14 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                 body = {}
                 body["message"] = new_body
 
+            # 
+            # onyl send push notification when text is included 
+            # TODO: also when image is added
+            # 
+            if "msgtype" not in n.content or n.content["msgtype"] != "m.text":
+                return
+
+
             if n.room_name and n.sender_display_name:
                 content_display = None
                 if "msgtype" in n.content and n.content["msgtype"] == "m.text":
