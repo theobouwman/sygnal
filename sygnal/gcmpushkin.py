@@ -598,22 +598,19 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                 body["message"] = new_body
 
             # 
-            # onyl send push notification when text is included 
-            # TODO: also when image is added
+            # only add notification if it has a body text
             # 
-            if "msgtype" not in n.content or n.content["msgtype"] != "m.text":
-                return
-
-
             if n.room_name and n.sender_display_name:
                 content_display = None
-                if "msgtype" in n.content and n.content["msgtype"] == "m.text":
-                    content_display = n.content["body"]
+                _body_text = n.content["body"]
+                if "msgtype" in n.content and n.content["msgtype"] == "m.text" and _body_text is not None and len(_body_text) > 0:
+                    content_display =_body_text
 
-                body['message']['notification'] = {
-                    'title': n.room_name,
-                    'body': f'({n.sender_display_name}) {content_display}'
-                }
+                if content_display is not None:
+                    body['message']['notification'] = {
+                        'title': n.room_name,
+                        'body': f'({n.sender_display_name}) {content_display}'
+                    }
             
             for retry_number in range(0, MAX_TRIES):
                 # This has to happen inside the retry loop since `pushkeys` can be modified in the
