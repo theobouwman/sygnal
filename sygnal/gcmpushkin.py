@@ -598,7 +598,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                 body["message"] = new_body
 
             # 
-            # only add notification if it has a body text
+            # only add notification if it has a body text.
             # 
             if n.room_name and n.sender_display_name:
                 content_display = None
