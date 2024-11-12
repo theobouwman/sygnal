@@ -614,6 +614,22 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                             'title': n.room_name,
                             'body': f'({n.sender_display_name}) {content_display}'
                         }
+                        _apns = {
+                            "payload": {
+                                "aps": {
+                                    "badge": n.counts.unread
+                                }
+                            }
+                        }
+
+
+                        if 'apns' in body['message']:
+                            apns = body['message']['apns'] | _apns
+                        else:
+                            apns = _apns
+
+                        body['message']['apns'] = apns
+     
             
             for retry_number in range(0, MAX_TRIES):
                 # This has to happen inside the retry loop since `pushkeys` can be modified in the
