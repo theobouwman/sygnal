@@ -610,10 +610,17 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                         content_display =_body_text
 
                     if content_display is not None:
-                        body['message']['notification'] = {
-                            'title': n.room_name,
-                            'body': f'({n.sender_display_name}) {content_display}'
-                        }
+                        if n.room_name.startswith('private-room-'):
+                            body['message']['notification'] = {
+                                'title': n.sender_display_name,
+                                'body': f'{content_display}'
+                            }
+                        else:
+                            body['message']['notification'] = {
+                                'title': n.room_name,
+                                'body': f'({n.sender_display_name}) {content_display}'
+                            }
+                            
                         _apns = {
                             "payload": {
                                 "aps": {
