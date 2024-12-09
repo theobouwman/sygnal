@@ -609,6 +609,9 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                     if "msgtype" in n.content and n.content["msgtype"] == "m.text" and _body_text is not None and len(_body_text) > 0:
                         content_display =_body_text
 
+                    if "msgtype" in n.content and n.content["msgtype"] == "m.image":
+                        content_display = "Uploaded an image"
+
                     if content_display is not None:
                         if n.room_name.startswith('private-room-'):
                             body['message']['notification'] = {
@@ -620,7 +623,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                                 'title': n.room_name,
                                 'body': f'({n.sender_display_name}) {content_display}'
                             }
-                            
+
                         _apns = {
                             "payload": {
                                 "aps": {
