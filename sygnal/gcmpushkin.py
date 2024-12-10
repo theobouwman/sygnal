@@ -603,7 +603,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
             if n.room_name and n.sender_display_name:
                 content_display = None
 
-                if 'body' in n.content:
+                if 'body' in n.content: # TODO: solo image not a notif.
                     _body_text = n.content["body"]
                     
                     if "msgtype" in n.content and n.content["msgtype"] == "m.text" and _body_text is not None and len(_body_text) > 0:
@@ -613,7 +613,7 @@ class GcmPushkin(ConcurrencyLimitedPushkin):
                         content_display = "Uploaded an image"
 
                     if content_display is not None:
-                        if n.room_name.startswith('private-room-'):
+                        if 'private-room' in n.room_name:
                             body['message']['notification'] = {
                                 'title': n.sender_display_name,
                                 'body': f'{content_display}'
